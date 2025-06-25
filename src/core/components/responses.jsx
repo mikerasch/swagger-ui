@@ -79,7 +79,6 @@ export default class Responses extends React.Component {
     const ContentType = getComponent( "contentType" )
     const LiveResponse = getComponent( "liveResponse" )
     const Response = getComponent( "response" )
-
     let produces = this.props.produces && this.props.produces.size ? this.props.produces : Responses.defaultProps.produces
 
     const isSpecOAS3 = specSelectors.isOAS3()
@@ -95,7 +94,7 @@ export default class Responses extends React.Component {
         <div className="opblock-section-header">
           <h4>Responses</h4>
             { specSelectors.isOAS3() ? null : <label htmlFor={controlId}>
-              <span>Response content type</span>
+               <span>Response content type</span>
               <ContentType value={producesValue}
                          ariaControls={regionId}
                          ariaLabel="Response content type"

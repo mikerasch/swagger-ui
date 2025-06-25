@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { fromJS, List } from "immutable"
 import { getKnownSyntaxHighlighterLanguage } from "core/utils/jsonParse"
 import createHtmlReadyId from "core/utils/create-html-ready-id"
+import convertToCode from "../plugins/convert/index"
 
 const NOOP = Function.prototype
 
@@ -119,7 +120,7 @@ export default class ParamBody extends PureComponent {
 
     const regionId = createHtmlReadyId(`${pathMethod[1]}${pathMethod[0]}_parameters`)
     const controlId = `${regionId}_select`
-
+    const isApplicationJson = consumesValue === 'application/json'
     return (
       <div className="body-param" data-param-name={param.get("name")} data-param-in={param.get("in")}>
         {
@@ -137,7 +138,17 @@ export default class ParamBody extends PureComponent {
                          </div>
           }
           <label htmlFor={controlId}>
-            <span>Parameter content type</span>
+            {isApplicationJson && (
+                <Button
+                  className="btn convert body-param__example-edit"
+                  onClick={() => convertToCode(sampleResponse)}
+                >
+                  Convert Request Body to Code
+                </Button>
+            )}
+          <span style={{ marginTop: "8px", display: "inline-block" }}>
+            Parameter content type
+          </span>
             <ContentType
               value={ consumesValue }
               contentTypes={ consumes }

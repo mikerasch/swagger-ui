@@ -5,6 +5,7 @@ import cx from "classnames"
 import { fromJS, Seq, Iterable, List, Map } from "immutable"
 import { getExtensions, fromJSOrdered, stringify } from "core/utils"
 import { getKnownSyntaxHighlighterLanguage } from "core/utils/jsonParse"
+import convertToCode from "../plugins/convert/index"
 
 
 const getExampleComponent = ( sampleResponse, HighlightCode ) => {
@@ -105,13 +106,14 @@ export default class Response extends React.Component {
     const ContentType = getComponent("contentType")
     const ExamplesSelect = getComponent("ExamplesSelect")
     const Example = getComponent("Example")
-
+    const Button = getComponent("Button")
 
     var schema, specPathWithPossibleSchema
 
     const activeContentType = this.state.responseContentType || contentType
     const activeMediaType = response.getIn(["content", activeContentType], Map({}))
     const examplesForMediaType = activeMediaType.get("examples", null)
+    const isApplicationJson = activeContentType === 'application/json'
 
     // Goal: find a schema value for `schema`
     if(isOAS3) {
@@ -139,8 +141,8 @@ export default class Response extends React.Component {
         const targetExample = examplesForMediaType
           .get(targetExamplesKey, Map({}))
         const getMediaTypeExample = (targetExample) =>
-          Map.isMap(targetExample) 
-          ? targetExample.get("value") 
+          Map.isMap(targetExample)
+          ? targetExample.get("value")
           : undefined
         mediaTypeExample = getMediaTypeExample(targetExample)
         if(mediaTypeExample === undefined) {
@@ -168,9 +170,7 @@ export default class Response extends React.Component {
       sampleGenConfig,
       shouldOverrideSchemaExample ? mediaTypeExample : undefined
     )
-
     const example = getExampleComponent( sampleResponse, HighlightCode )
-
     return (
       <tr className={ "response " + ( className || "") } data-code={code}>
         <td className="response-col_status">
@@ -178,9 +178,20 @@ export default class Response extends React.Component {
         </td>
         <td className="response-col_description">
 
-          <div className="response-col_description__inner">
-            <Markdown source={ response.get( "description" ) } />
+        <div className="response-col_description__inner" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ flex: 1 }}>
+            <Markdown source={response.get("description")} />
           </div>
+            {sampleResponse && isApplicationJson && (
+              <Button
+              className="btn convert body-param__example-edit"
+                onClick={() => convertToCode(sampleResponse)}
+              >
+                Convert Response Body to Code
+              </Button>
+            )}
+        </div>
+
 
           { !showExtensions || !extensions.size ? null : extensions.entrySeq().map(([key, v]) => <ResponseExtension key={`${key}-${v}`} xKey={key} xVal={v} /> )}
 

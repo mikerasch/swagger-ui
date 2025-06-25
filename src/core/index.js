@@ -31,7 +31,6 @@ import DownloadUrlPlugin from "./plugins/download-url"
 import SyntaxHighlightingPlugin from "core/plugins/syntax-highlighting"
 import VersionsPlugin from "core/plugins/versions"
 import SafeRenderPlugin from "./plugins/safe-render"
-
 import {
   defaultOptions,
   optionsFromQuery,

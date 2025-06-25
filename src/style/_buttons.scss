@@ -38,6 +38,12 @@
     @include type.text_headline($btn-cancel-font-color);
   }
 
+  &.convert {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  }
+
   &.authorize {
     line-height: 1;
 
