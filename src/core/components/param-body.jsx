@@ -117,7 +117,6 @@ export default class ParamBody extends PureComponent {
     if (testValueForJson) {
       language = "json"
     }
-
     const regionId = createHtmlReadyId(`${pathMethod[1]}${pathMethod[0]}_parameters`)
     const controlId = `${regionId}_select`
     const isApplicationJson = consumesValue === 'application/json'
@@ -141,7 +140,7 @@ export default class ParamBody extends PureComponent {
             {isApplicationJson && (
                 <Button
                   className="btn convert body-param__example-edit"
-                  onClick={() => convertToCode(sampleResponse)}
+                  onClick={() => convertToCode(value)}
                 >
                   Convert Request Body to Code
                 </Button>

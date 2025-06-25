@@ -113,7 +113,7 @@ export default class Response extends React.Component {
     const activeContentType = this.state.responseContentType || contentType
     const activeMediaType = response.getIn(["content", activeContentType], Map({}))
     const examplesForMediaType = activeMediaType.get("examples", null)
-    const isApplicationJson = activeContentType === 'application/json'
+    const isValidContentTypeForConversion = activeContentType === 'application/json' || activeContentType === '/*'
 
     // Goal: find a schema value for `schema`
     if(isOAS3) {
@@ -182,7 +182,7 @@ export default class Response extends React.Component {
           <div style={{ flex: 1 }}>
             <Markdown source={response.get("description")} />
           </div>
-            {sampleResponse && isApplicationJson && (
+            {sampleResponse && isValidContentTypeForConversion && (
               <Button
               className="btn convert body-param__example-edit"
                 onClick={() => convertToCode(sampleResponse)}
